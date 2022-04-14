@@ -10,15 +10,24 @@ import org.springframework.web.client.RestTemplate;
 @PropertySource("classpath:value.properties")
 public class RecordService {
 
+  private RestTemplate restTemplate;
+
   @Value("${api.url}")
   private String API_URL;
 
-  private Record getRecordFromApi() {
-    RestTemplate restTemplate = new RestTemplate();
-    return restTemplate.getForObject(API_URL, Record.class);
+  public RecordService() {
+    this.restTemplate = new RestTemplate();
   }
 
-  public void printRecord() {
-    System.out.println(getRecordFromApi().toString());
+  private Record getRecordFromApi() {
+    return this.restTemplate.getForObject(API_URL, Record.class);
+  }
+
+  public void printRecord(Record record) {
+    System.out.println(record.toString());
+  }
+
+  public void processRecord() {
+    printRecord(getRecordFromApi());
   }
 }

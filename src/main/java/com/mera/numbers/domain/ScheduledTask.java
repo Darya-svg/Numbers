@@ -18,7 +18,7 @@ public class ScheduledTask {
   }
 
   @Scheduled(fixedDelay = 5000)
-  public void printRecord() {
-    recordService.printRecord();
+  public void executeTask() {
+    recordService.processRecord();
   }
 }
