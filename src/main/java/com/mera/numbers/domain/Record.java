@@ -25,7 +25,7 @@ public class Record {
   private long id;
 
   @Column(name = "number")
-  private long number;
+  private String number;
 
   @Column(name = "fact")
   private String text;
@@ -34,4 +34,5 @@ public class Record {
   public String toString() {
     return number + ", " + text;
   }
+
 }
