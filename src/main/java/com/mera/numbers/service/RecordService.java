@@ -2,6 +2,8 @@ package com.mera.numbers.service;
 
 
 import com.mera.numbers.domain.Record;
+import com.mera.numbers.domain.CalculateLengthAction;
+import com.mera.numbers.domain.ReverseStringAction;
 import com.mera.numbers.repository.RecordRepository;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -18,13 +20,18 @@ public class RecordService {
 
   private RestTemplate restTemplate;
   private final RecordRepository recordRepository;
+  private final CalculateLengthAction stringLength;
+  private final ReverseStringAction stringReverse;
 
   @Value("${api.url}")
   private String API_URL;
 
   @Autowired
-  public RecordService(RecordRepository recordRepository) {
+  public RecordService(RecordRepository recordRepository,
+      CalculateLengthAction stringLength, ReverseStringAction stringReverse) {
     this.recordRepository = recordRepository;
+    this.stringLength = stringLength;
+    this.stringReverse = stringReverse;
     this.restTemplate = new RestTemplate();
   }
 
@@ -34,14 +41,24 @@ public class RecordService {
 
   public void printRecord(Record record) {
     log.info(
-        "Processing a record - id=[{}] number=[{}] fact=[{}]", record.getId(), record.getNumber(),
+        "Saved record - id=[{}] number=[{}] fact=[{}]", record.getId(), record.getNumber(),
         record.getText());
   }
 
   public void processRecord() {
     Record record = getRecordFromApi();
-    printRecord(record);
     saveRecord(record);
+    printRecord(record);
+    reverseAndLog(record);
+    calculateLengthAndLog(record);
+  }
+
+  public void reverseAndLog(Record record) {
+    log.info("Reversed string: " + stringReverse.action(record));
+  }
+
+  public void calculateLengthAndLog(Record record) {
+    log.info(stringLength.action(record));
   }
 
   public void saveRecord(Record record) {
