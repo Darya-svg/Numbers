@@ -49,16 +49,16 @@ public class RecordService {
     Record record = getRecordFromApi();
     saveRecord(record);
     printRecord(record);
-    reverseAndLog(record.getText());
-    calculateLengthAndLog(record.getText());
+    reverseAndLog(record);
+    calculateLengthAndLog(record);
   }
 
-  public void reverseAndLog(String text) {
-    log.info("Reversed string: " + stringReverse.action(text));
+  public void reverseAndLog(Record record) {
+    log.info("Reversed string: " + stringReverse.action(record));
   }
 
-  public void calculateLengthAndLog(String text) {
-    log.info(stringLength.action(text));
+  public void calculateLengthAndLog(Record record) {
+    log.info(stringLength.action(record));
   }
 
   public void saveRecord(Record record) {

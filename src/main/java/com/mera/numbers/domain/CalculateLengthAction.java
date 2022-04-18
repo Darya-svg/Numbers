@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 public class CalculateLengthAction implements RecordAction {
 
   @Override
-  public String action(String text) {
-    return "The length of fact's string: " + text.length() + " symbols.";
+  public String action(Record record) {
+    return "The length of fact's string: " + record.getText().length() + " symbols.";
   }
 }

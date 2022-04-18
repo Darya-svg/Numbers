@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 public class ReverseStringAction implements RecordAction {
 
   @Override
-  public String action(String text) {
-    return new StringBuilder(text).reverse().toString();
+  public String action(Record record) {
+    return new StringBuilder(record.getText()).reverse().toString();
   }
 }
