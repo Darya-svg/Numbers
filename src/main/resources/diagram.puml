@@ -1,0 +1,60 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor User #A8C398
+participant ScheduledTask #E2E0A1
+control RecordController
+participant RecordService
+entity Record
+participant ReverseRecord
+participant RecordLength
+participant RecordRepository
+database Database #84C2BF
+box "external" #LightBlue
+participant API
+endbox
+
+ loop every 5 sec
+ScheduledTask->RecordService:processRecord()
+RecordService->API:get record request
+activate API
+RecordService<-- API: return record as JSON
+deactivate API
+|||
+RecordService->Record: new Record()
+RecordService<--Record: return Record
+|||
+RecordService->RecordRepository:save()\n
+RecordRepository->Database:save Record
+
+RecordService->RecordService:printRecord()\n
+|||
+RecordService->ReverseRecord:action(Record)\n
+RecordService<--ReverseRecord:return reversed Record's field "text" as String
+|||
+RecordService->RecordLength:action(Record)\n
+RecordService<--RecordLength: return String with length of Record's field "text"
+ScheduledTask<--RecordService:
+end
+
+group RestController
+User->RecordController: get all records request
+RecordController->RecordService:findAllRecords()\n
+RecordService->RecordRepository:findAll()\n
+RecordRepository->Database:get all Record's
+RecordRepository<--Database:return Record's
+RecordController<--RecordRepository:return: List<Record>
+User<--RecordController: return record-list.html
+|||
+User->RecordController: get record by id request
+RecordController->RecordService:findRecordById()
+RecordService->RecordRepository:getById()
+RecordRepository->Database:get Record with id=
+RecordRepository<--Database:return Record
+RecordController<-RecordRepository:return: Record
+User<--RecordController: return record-id.html
+end
+
+@enduml
